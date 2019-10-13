@@ -94,9 +94,8 @@ shinyUI(dashboardPage(
                 br(),
                 h3("The caveats"),
                 br(),
-                p("This work is not deisgned to be alarmist nor push a policy agenda; the aim is simply to provide easy access to the output of one study"),
                 p("Making robust predictions is incredibly difficult. This approach focusses on the narrow question of technical feasibility of automation; this ignores the realities of implementation of possible policy mitigation"),
-                p("Fuller detailes are provided in the background section and blogpost"),
+                p("Fuller detailes are provided in the background section and blog post"),
                 br(),
                 h3("Ongoing work"),
                 br(),
@@ -105,6 +104,7 @@ shinyUI(dashboardPage(
               
               )),
       tabItem(tabName = "time",
+        fluidRow(h2("Distribution of jobs by likelihood of automation")),
         fluidRow(
           infoBoxOutput("highBox"),
           infoBoxOutput("mediumBox"),
@@ -121,6 +121,7 @@ shinyUI(dashboardPage(
           ),
       tabItem(
         tabName = "visuals",
+        fluidRow(h3("Plots of absolute and relative risk classification by job area")),
         fluidRow(box(
           plotOutput("distn"), width = 600, height = 400
         )),
@@ -133,6 +134,7 @@ shinyUI(dashboardPage(
                 plotOutput("shape", height = "100%", width = "100%"))
               ),      
       tabItem(tabName = "maps",
+              fluidRow(h3("Plots of high and low risk jobs in the US")),
               fluidRow(box(
                 htmlOutput("maphigh")
               )),

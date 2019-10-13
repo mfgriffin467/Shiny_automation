@@ -152,23 +152,23 @@ output$table = DT::renderDataTable({
   
 output$time = renderPlot(data_all_year_filter() %>%
                          group_by(YEAR,prob_automation_class) %>% 
-                         summarise(current_jobs = sum(TOT_EMP)) %>% 
+                         summarise(current_jobs = sum(TOT_EMP)/10**6) %>% 
                          ggplot() 
                           + geom_area(aes(x=YEAR,y=current_jobs,fill=prob_automation_class))
                           + xlab("Jobs over time")
-                          + ylab("Count of US jobs")
-                          + ggtitle("Distribution of jobs by likelihood of automation")
+                          + ylab("Count of US jobs (millions)")
+                          + ggtitle("Absolute figures")
                           + scale_fill_brewer(palette = "Spectral") 
                          + theme(text = element_text(size = 20)))
 
 output$time2 = renderPlot(data_all_year_filter() %>%
                            group_by(YEAR,prob_automation_class) %>% 
-                           summarise(current_jobs = sum(TOT_EMP)) %>% 
+                           summarise(current_jobs = sum(TOT_EMP)/10**6) %>% 
                            ggplot() 
                          + geom_area(aes(x=YEAR,y=current_jobs,fill=prob_automation_class),position = "fill")
                          + xlab("Jobs over time")
-                         + ylab("Count of US jobs")
-                         + ggtitle("Distribution of jobs by likelihood of automation")
+                         + ylab("Count of US jobs (millions)")
+                         + ggtitle("Relative proportions")
                          + scale_fill_brewer(palette = "Spectral") 
                          + theme(text = element_text(size = 20)))
 
@@ -176,7 +176,7 @@ output$maphigh <- renderGvis({
     gvisGeoChart(data = data_job_filter() %>%  
                 filter(prob_automation_class == "1) High") %>% 
                 group_by(STATE) %>%
-                summarise(current_jobs = sum(TOT_EMP)),
+                summarise(current_jobs = sum(TOT_EMP)/10**6),
                 locationvar = "STATE",
                 colorvar = "current_jobs",
                 #title = "Absolute job count at high risk, within selected sector",
@@ -184,7 +184,7 @@ output$maphigh <- renderGvis({
                   region = "US",
                   displayMode = "regions",
                   resolution = "provinces",
-                  colorAxis="{colors:['red', 'white']}",
+                  colorAxis="{colors:['white', 'red']}",
                   width = "800",
                   height = "400"
                   )
@@ -195,15 +195,17 @@ output$maplow <- renderGvis({
   gvisGeoChart(data = data_job_filter() %>%  
                  filter(prob_automation_class == "3) Low") %>% 
                  group_by(STATE) %>%
-                 summarise(current_jobs = sum(TOT_EMP)),
+                 summarise(current_jobs = sum(TOT_EMP)/10**6),
                locationvar = "STATE",
+               #header = 'test',
                colorvar = "current_jobs",
                #title = "Absolute job count at high risk, within selected sector",
                options = list(
+                 title = "Test",
                  region = "US",
                  displayMode = "regions",
                  resolution = "provinces",
-                 colorAxis="{colors:['green', 'white']}",
+                 colorAxis="{colors:['white', 'green']}",
                  width = "800",
                  height = "400"
                )
@@ -215,14 +217,14 @@ output$shape = renderPlot(
   data_state_filter() %>% 
   filter(!is.na(Probability)) %>%  ####HACK######################################
   group_by(rounded_prob, top_level_job_category_desc) %>%
-  summarise(current_jobs = sum(TOT_EMP)) %>% 
+  summarise(current_jobs = sum(TOT_EMP)/10**6) %>% 
   ggplot()
     + geom_histogram(aes(x=rounded_prob,weight=current_jobs,fill=top_level_job_category_desc),bins=40)
     + geom_vline(aes(xintercept = 0.3),color = "green")
     + geom_vline(aes(xintercept = 0.7),color = "red")
     + xlab("Estimated likelihood of role computerisation")
     + scale_x_continuous(labels = scales::percent)
-    + ylab("Count of US jobs")
+    + ylab("Count of US jobs (millions)")
     + ggtitle("Distribution of jobs by likelihood of automation, within segment")
     + theme_minimal()    
     + theme(text = element_text(size = 20),legend.position = "bottom")
@@ -235,11 +237,11 @@ output$shape = renderPlot(
 output$distn = renderPlot(
   ggplot(data = summary_filter_data_df())
   + geom_col(aes(x = reorder(top_level_job_category_desc,-current_jobs),
-      y = current_jobs,
+      y = current_jobs/10**6,
       fill = prob_automation_class
     ))
   + theme_minimal()
-  + ylab("Count of US jobs")
+  + ylab("Proportion of US jobs by category")
   + theme(text = element_text(size = 20),axis.text.x=element_blank(),axis.title.x=element_blank())
   + scale_fill_brewer(palette = "Spectral")
   + scale_x_discrete(

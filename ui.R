@@ -68,8 +68,7 @@ shinyUI(dashboardPage(
     )
   ),
   
-  
-  dashboardBody(
+dashboardBody(
     tabItems(
       tabItem(tabName = "intro",
               fluidRow(style = "padding: 20px;",

@@ -1,35 +1,3 @@
-# LIST OF CHANGES NEEDED
-
-# CORRECETD - totals way too small
-# Clean up ML code
-# Add select all functionality
-# Source bottleneck features
-# Add skills visualisation
-# Fix wildc# Speed up with data cleansing? COnsolidate tables
-# Wildard selections - add select / deselect all
-# Create general dashbard
-
-
-
-
-#TO DO
-
-# Post on github and shinyIO
-# Rename automation 
-
-# Clean up ML code
-
-# Figure out gaps vs 2010 - looks like some professions aggregated eg postsecondary teachers, misc farm workers
-# Hide drop downs for specifc tabs
-# Re-run ML for 2018
-# Fix ranking for main visuals
-# Write up aims in Word
-
-
-
-#OPTIONAL
-# Look at data science jobs / companey themes ???
-
 ## global.R ##
 library(shiny)
 library(shinydashboard)

@@ -1,6 +1,9 @@
 ## server.R ##
 shinyServer(function(input, output, session) {
 
+scaleFUN <- function(x) sprintf("%.2f", x)
+  
+  
 # Generic tables ####
 
 #Create filtered summary for histogram
@@ -114,7 +117,7 @@ output$highBox = renderInfoBox({
     
     value = 100* round(sum(subset$jobs)/sum(total$jobs),digits=3)
     infoBox(color = "orange",
-            title = "% jobs at high risk",
+            title = "% jobs at medium risk",
             subtitle = "in selection",
             value, 
             icon = icon("exchange-alt")) 
@@ -130,7 +133,7 @@ output$highBox = renderInfoBox({
     
     value = 100* round(sum(subset$jobs)/sum(total$jobs),digits=3)
     infoBox(color = "green",
-            title = "% jobs at high risk",
+            title = "% jobs at low risk",
             subtitle = "in selection",
             value, 
             icon = icon("hand-o-up")) 
@@ -142,6 +145,7 @@ output$highBox = renderInfoBox({
 output$table = DT::renderDataTable({
     datatable(data_all_filter() %>% 
               select(keep_columns) %>%
+ #             rename(rename_columns = keep_columns) %>% 
               arrange(desc(Probability)),
               caption = "Use search bar to explore detail with state/type bucket")
   })
@@ -157,9 +161,10 @@ output$time = renderPlot(data_all_year_filter() %>%
                           + geom_area(aes(x=YEAR,y=current_jobs,fill=prob_automation_class))
                           + xlab("Jobs over time")
                           + ylab("Count of US jobs (millions)")
+                          + scale_y_continuous(labels=scaleFUN)
                           + ggtitle("Absolute figures")
-                          + scale_fill_brewer(palette = "Spectral") 
-                         + theme(text = element_text(size = 20),legend.position = "bottom"))
+                          + scale_fill_brewer(palette = "Spectral",name="Likelihood of automation")
+                          + theme(text = element_text(size = 20),legend.position = "bottom"))
 
 output$time2 = renderPlot(data_all_year_filter() %>%
                            group_by(YEAR,prob_automation_class) %>% 
@@ -167,9 +172,10 @@ output$time2 = renderPlot(data_all_year_filter() %>%
                            ggplot() 
                          + geom_area(aes(x=YEAR,y=current_jobs,fill=prob_automation_class),position = "fill")
                          + xlab("Jobs over time")
-                         + ylab("Count of US jobs (millions)")
+                         + ylab("Proportion of US jobs (millions)")
+                         + scale_y_continuous(labels = scales::percent)
                          + ggtitle("Relative proportions")
-                         + scale_fill_brewer(palette = "Spectral") 
+                         + scale_fill_brewer(palette = "Spectral",name="Likelihood of automation")
                          + theme(text = element_text(size = 20),legend.position = "bottom"))
 
 output$maphigh <- renderGvis({
@@ -184,7 +190,7 @@ output$maphigh <- renderGvis({
                   displayMode = "regions",
                   resolution = "provinces",
                   colorAxis="{colors:['white', 'red']}",
-                  width = "800",
+                  width = "700",
                   height = "350"
                   )
     )
@@ -202,7 +208,7 @@ output$mapmedium <- renderGvis({
                  displayMode = "regions",
                  resolution = "provinces",
                  colorAxis="{colors:['white', 'orange']}",
-                 width = "800",
+                 width = "700",
                  height = "350"
                )
   )
@@ -223,7 +229,7 @@ output$maplow <- renderGvis({
                  displayMode = "regions",
                  resolution = "provinces",
                  colorAxis="{colors:['white', 'green']}",
-                 width = "800",
+                 width = "700",
                  height = "350"
                )
   )
@@ -242,12 +248,13 @@ output$shape = renderPlot(
     + xlab("Estimated likelihood of role computerisation")
     + scale_x_continuous(labels = scales::percent)
     + ylab("Count of US jobs (millions)")
+    + scale_y_continuous(labels=scaleFUN)
     + ggtitle("Distribution of jobs by likelihood of automation, within segment")
     + theme_minimal()    
     + theme(text = element_text(size = 20),legend.position = "bottom")
-    + scale_fill_brewer(palette = "Spectral"),
-  height = 900,
-  width = 1800
+    + scale_fill_brewer(palette = "Spectral",name="Job category"),
+  height = 800,
+  width = 1600
 )
   
   
@@ -259,8 +266,9 @@ output$distn = renderPlot(
     ))
   + theme_minimal()
   + ylab("Proportion of US jobs by category")
+  + scale_y_continuous(labels=scaleFUN)
   + theme(text = element_text(size = 20),axis.text.x=element_blank(),axis.title.x=element_blank(),legend.position = "top")
-  + scale_fill_brewer(palette = "Spectral")
+  + scale_fill_brewer(palette = "Spectral",name="Likelihood of automation")
   + scale_x_discrete(
     labels = function(x)
     lapply(strwrap(x, width = 10, simplify = FALSE), paste, collapse = "\n"))
@@ -275,9 +283,10 @@ output$distn2 = renderPlot(
         fill = prob_automation_class),
     position = "fill") 
   + theme_minimal()
-  + ylab("Propotion by class")
+  + ylab("Proportion by class")
+  + scale_y_continuous(labels = scales::percent)
   + theme(text = element_text(size = 20),legend.position = "none")
-  + scale_fill_brewer(palette = "Spectral")
+  + scale_fill_brewer(palette = "Spectral",name="Likelihood of automation")
   + scale_x_discrete(
       labels = function(x)
       lapply(strwrap(x, width = 10, simplify = FALSE), paste, collapse = "\n"))
@@ -304,13 +313,13 @@ output$skills = renderPlot(data_all_filter() %>%
 
 output$bottleneck = renderPlot(data_all_filter() %>%
                                  group_by(prob_automation_class) %>%
-                                 summarise(fine_arts = mean(Fine.Arts),
-                                           finger_dexterity = mean(Finger.Dexterity),
-                                           manual_dexterity = mean(Manual.Dexterity),
+                                 summarise(fine_arts = mean(fine_arts),
+                                           finger_dexterity = mean(finger_dexterity),
+                                           manual_dexterity = mean(manual_dexterity),
                                            negotiation = mean(Negotiation),
                                            originality = mean(Originality),
                                            persuasion = mean(Persuasion),
-                                           social_perceptiveness = mean(Social.Perceptiveness)) %>% 
+                                           social_perceptiveness = mean(social_perceptiveness)) %>% 
                                  gather("skill","level",-prob_automation_class) %>%
                                  ggplot(aes(x=prob_automation_class,fill=skill,y=level))
                                + geom_col(stat="identity",position="dodge")

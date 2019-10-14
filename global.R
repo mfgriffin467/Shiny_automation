@@ -36,9 +36,7 @@ keep_columns = c(
   'OCC_CODE',
   'OCC_TITLE',
   'TOT_EMP',
-  'H_MEAN',
-  'econ_value',
-  'Rank',
+  'A_MEAN',
   'Probability',
   'major_job_description',
   'top_level_job_category_desc',
@@ -47,4 +45,21 @@ keep_columns = c(
   'physical_abilities',
   'psychomotor_abilities',
   'sensory_abilities'  
+  )
+
+rename_columns = c(
+  'Year',
+  'State',
+  'OCC_CODE',
+  'Job title',
+  'Count of jobs',
+  'Mean annual salary ',
+  'Probability of automation',
+  'Job group low',
+  'Job group high',
+  'Probability of automation, class',
+  'Cognitive ability requirement',
+  'Physical ability requirement',
+  'Psychomotor ability requirement',
+  'Sensory ability requirement'
   )

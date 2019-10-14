@@ -14,12 +14,12 @@ See Shiny IO here: https://mfgriffin.shinyapps.io/Shiny/
 2) Update the original 2012 research to latest available information
 
 
-The dashboard enables users to explore a variety of questions which could be of use to individuals, organisations and policy-makers:"),em(
-1) How many jobs are at risk of computerisation?"
-2) How are high risk roles distributed across states and industries?"
-3)  Is my current / future role likley to be replaced?"
-4)  Which skills are more or less likley to be automated"
-5)  How has the landscape changed since the 2012 research?"
+The dashboard enables users to explore a variety of questions which could be of use to individuals, organisations and policy-makers:
+1) How many jobs are at risk of computerisation?
+2) How are high risk roles distributed across states and industries?
+3)  Is my current / future role likley to be replaced?
+4)  Which skills are more or less likley to be automated?
+5)  How has the landscape changed since the 2012 research?
 
 
 ## Key caveats:
@@ -43,8 +43,7 @@ https://www.oxfordmartin.ox.ac.uk/downloads/academic/The_Future_of_Employment.pd
 b) Job breakdowns across role and state are taken for 2010, 2012, 2014, 2016 and 2018
 https://www.bls.gov/oes/tables.htm
 
-Tables are enriched to cover skill/ability/knowledge data for "bottleneck variables" identified in (a)
-O*NET
+Tables are enriched to cover skill/ability/knowledge data for "bottleneck variables" identified in (a) using information from O*NET
 
 c) The shiny application shows the mapping of estimates from (a) across the datasets in (b)
 
@@ -69,9 +68,9 @@ Retraining on the 2010 labels produce similar results so new estimates are obtai
 - Extend to other countries?
 
 MAJOR
-Re-run ML for 2018
+- Re-run ML for 2018
 
 MINOR
-Draft bog post in Word
-Hide drop downs for specific tabs
-Fix ranking for main visuals
+- Draft bog post in Word
+- Hide drop downs for specific tabs
+- Fix ranking for main visuals

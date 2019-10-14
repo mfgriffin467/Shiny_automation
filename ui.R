@@ -4,7 +4,7 @@ shinyUI(dashboardPage(
   skin = "purple",
   dashboardHeader(title = "Machines & humans working together", titleWidth = 400),
   dashboardSidebar(
-    sidebarUserPanel("Michael Griffin - ADD IMAGE"),
+    sidebarUserPanel("Michael Griffin"),
     br(),
     sidebarMenu(
       menuItem("Intro", 
@@ -103,7 +103,8 @@ dashboardBody(
               
               )),
       tabItem(tabName = "time",
-        fluidRow(h2("Distribution of jobs by likelihood of automation")),
+        fluidRow(style = "padding: 20px;",
+                 h2("Distribution of jobs by likelihood of automation")),
         fluidRow(
           infoBoxOutput("highBox"),
           infoBoxOutput("mediumBox"),
@@ -120,7 +121,8 @@ dashboardBody(
           ),
       tabItem(
         tabName = "visuals",
-        fluidRow(h3("Plots of absolute and relative risk classification by job area")),
+        fluidRow(style = "padding: 20px;",
+          h3("Plots of absolute and relative risk classification by job area")),
         fluidRow(box(
           plotOutput("distn"), width = 600, height = 400
         )),
@@ -133,13 +135,21 @@ dashboardBody(
                 plotOutput("shape", height = "100%", width = "100%"))
               ),      
       tabItem(tabName = "maps",
-              fluidRow(h3("Plots of high and low risk jobs in the US")),
-              fluidRow(box(
-                htmlOutput("maphigh")
-              )),
-              fluidRow(box(
-                htmlOutput("maplow")
-              ))
+              fluidRow(style = "padding: 20px;",
+                h3("Automation classes by US state")),
+              fluidRow(
+                column(width=6, box(width=12,htmlOutput("maphigh"))),
+                column(width=6, box(width=12,htmlOutput("mapmedium")))
+              ),
+              fluidRow(
+                column(width=6, box(width=12,htmlOutput("maplow"))),
+                column(width=6, box(width=12,style = "padding: 20px;",
+                                    h4("Observations:"),
+                                    p("Jobs losses are focussed in the states with large workforces, unsurprisingly"),
+                                    br(),
+                                    h4("Approach:"),
+                                    p("Plots reflect (absolute) job count within each classification and state")
+                                    )))
               ),
       tabItem(tabName = "skills",
               fluidRow(
@@ -147,30 +157,41 @@ dashboardBody(
                 column(width=6, box(width=12, plotOutput("bottleneck")))
               ),
               fluidRow(
-                column(width=6, box(width=12, plotOutput("pay"))))
+                column(width=6, box(width=12, plotOutput("pay"))),
+                column(width=6, box(width=12, style = "padding: 20px;",
+                                    h4("Observations:"),
+                                    p("- Roles at higher risk of automation tend to rely more on physical and sensory abilities whilst low risk roles require higher cognitive levels"),
+                                    p("- Higher risk roles tend to have lower annual salaries, suggesting there may be an important class dimension in the impact"),
+                                    br(),
+                                    h4("Approach:"),
+                                    p("- All mean figures reflect a simple count-based mean of all sub-catgories of a segment - these are not weighted by job numbers"),
+                                    p("- Nine 'botteneck variables' are proposed and used as the explanatory features to estimate the likelihood of automation")
+                                    )))
               ),
       tabItem(tabName = "data",
-              fluidRow(box(
+              fluidRow(style = "padding: 20px;",
                 DT::dataTableOutput("table")
-              ))),
+              )),
       tabItem(tabName = "background",
               fluidRow(style = "padding: 20px;",
-                h2("Background on the author"),
+                h2("The author"),
                 p("Mike Griffin is training at the NYC data academy and has several years of experience in strategy/analytics roles in finance"),
                 p("He studied Natural Sciences (Physics) at the University of Cambridge and Management at the Judge Business School"),
                 p("Mike retains a strong passion for science and technology and enjoys sports, boardgames and advantures in nature!"),
                 br(),
                 br(),
-                h2("Background on the project"),
+                h2("The project"),
+                h3("Code and approach"),
+                a("https://github.com/mfgriffin467/Shiny_automation"),
                 h3("Datasets"),
+                br(),
                 p("Detailed jobs data is sourced from annual datasets here:"),
                 a("https://www.bls.gov/oes/tables.htm"),
+                br(),
+                br(),
                 p("Predictions are based on outputs from this research:"),
-                a("https://www.oxfordmartin.ox.ac.uk/downloads/academic/The_Future_of_Employment.pdf"),
-                h3("The prediction methodology"),
-                p("Core question: 'Can the tasks of this job be sufficiently specified, conditional on the availability of big data, to be performed by state of the art computer-controlled equipment'"),
-                h3("The caveats"),
-                p("Main body text")
+                a("https://www.oxfordmartin.ox.ac.uk/downloads/academic/The_Future_of_Employment.pdf")
+ 
               ))
     )
   )

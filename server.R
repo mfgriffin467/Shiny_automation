@@ -159,7 +159,7 @@ output$time = renderPlot(data_all_year_filter() %>%
                           + ylab("Count of US jobs (millions)")
                           + ggtitle("Absolute figures")
                           + scale_fill_brewer(palette = "Spectral") 
-                         + theme(text = element_text(size = 20)))
+                         + theme(text = element_text(size = 20),legend.position = "bottom"))
 
 output$time2 = renderPlot(data_all_year_filter() %>%
                            group_by(YEAR,prob_automation_class) %>% 
@@ -170,7 +170,7 @@ output$time2 = renderPlot(data_all_year_filter() %>%
                          + ylab("Count of US jobs (millions)")
                          + ggtitle("Relative proportions")
                          + scale_fill_brewer(palette = "Spectral") 
-                         + theme(text = element_text(size = 20)))
+                         + theme(text = element_text(size = 20),legend.position = "bottom"))
 
 output$maphigh <- renderGvis({
     gvisGeoChart(data = data_job_filter() %>%  
@@ -179,17 +179,34 @@ output$maphigh <- renderGvis({
                 summarise(current_jobs = sum(TOT_EMP)/10**6),
                 locationvar = "STATE",
                 colorvar = "current_jobs",
-                #title = "Absolute job count at high risk, within selected sector",
                 options = list(
                   region = "US",
                   displayMode = "regions",
                   resolution = "provinces",
                   colorAxis="{colors:['white', 'red']}",
                   width = "800",
-                  height = "400"
+                  height = "350"
                   )
     )
   })
+
+output$mapmedium <- renderGvis({
+  gvisGeoChart(data = data_job_filter() %>%  
+                 filter(prob_automation_class == "2) Medium") %>% 
+                 group_by(STATE) %>%
+                 summarise(current_jobs = sum(TOT_EMP)/10**6),
+               locationvar = "STATE",
+               colorvar = "current_jobs",
+               options = list(
+                 region = "US",
+                 displayMode = "regions",
+                 resolution = "provinces",
+                 colorAxis="{colors:['white', 'orange']}",
+                 width = "800",
+                 height = "350"
+               )
+  )
+})
 
 output$maplow <- renderGvis({
   gvisGeoChart(data = data_job_filter() %>%  
@@ -207,7 +224,7 @@ output$maplow <- renderGvis({
                  resolution = "provinces",
                  colorAxis="{colors:['white', 'green']}",
                  width = "800",
-                 height = "400"
+                 height = "350"
                )
   )
 })
@@ -229,7 +246,7 @@ output$shape = renderPlot(
     + theme_minimal()    
     + theme(text = element_text(size = 20),legend.position = "bottom")
     + scale_fill_brewer(palette = "Spectral"),
-  height = 1000,
+  height = 900,
   width = 1800
 )
   
@@ -242,7 +259,7 @@ output$distn = renderPlot(
     ))
   + theme_minimal()
   + ylab("Proportion of US jobs by category")
-  + theme(text = element_text(size = 20),axis.text.x=element_blank(),axis.title.x=element_blank())
+  + theme(text = element_text(size = 20),axis.text.x=element_blank(),axis.title.x=element_blank(),legend.position = "top")
   + scale_fill_brewer(palette = "Spectral")
   + scale_x_discrete(
     labels = function(x)
@@ -259,7 +276,7 @@ output$distn2 = renderPlot(
     position = "fill") 
   + theme_minimal()
   + ylab("Propotion by class")
-  + theme(text = element_text(size = 20))
+  + theme(text = element_text(size = 20),legend.position = "none")
   + scale_fill_brewer(palette = "Spectral")
   + scale_x_discrete(
       labels = function(x)
@@ -306,10 +323,11 @@ output$bottleneck = renderPlot(data_all_filter() %>%
 
 output$pay = renderPlot(data_all_filter() %>%
                                  group_by(prob_automation_class) %>%
-                                 summarise(mean_salary = mean(H_MEAN)) %>% 
+                                 summarise(mean_salary = mean(A_MEAN)) %>% 
                                  ggplot(aes(x=prob_automation_class,y=mean_salary))
                                + geom_col()
                               + xlab("Likelihood of computerisation")
+                              + ylab("Mean annual salary within bucket")
                               + scale_fill_brewer(palette = "Pastel1")     
                                + theme_minimal()
                                + theme(text = element_text(size = 20))

@@ -13,7 +13,7 @@ library(shinyWidgets)
 # Add search job list or other columns
 
 
-data_df = read.csv("~/Analytics/Courses/NYC_DSA/R_studio/Projects/ML_impacts/clean_dataset_comb.csv",stringsAsFactors=FALSE)
+data_df = read.csv("./data/clean_dataset_comb.csv",stringsAsFactors=FALSE)
 
 choice_year = c(2010,2012,2014,2016,2018)
 

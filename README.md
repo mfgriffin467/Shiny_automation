@@ -1,4 +1,4 @@
-## How vulnerable are US jobs to automation in the medium-term?
+# How vulnerable are US jobs to automation in the medium-term?
 
 “47% could be done by machines “over the next decade or two””
 Carl Benedikt Frey and Michael Osborne of Oxford University
@@ -8,7 +8,7 @@ See blog post here: TBC
 See Shiny IO here: https://mfgriffin.shinyapps.io/Shiny/
 
 
-# Project aims:
+## Project aims:
 
 1) Provide a dynamic tool for visualisation research on the possible impact of automation/computerisation of jobs over the medium-term
 2) Update the original 2012 research to latest available information
@@ -22,7 +22,7 @@ The dashboard enables users to explore a variety of questions which could be of 
 5)  How has the landscape changed since the 2012 research?"
 
 
-# Key caveats:
+## Key caveats:
 
 This analysis narrowly focusses on the theoretical potential for job substitution in the US, looking at a single measure of the estimated 
 probability that job roles can be fully automated. 
@@ -35,7 +35,7 @@ This approach therefore several real-life factors:
 - Resources: in a world of limited finances and technical resource (robust data, workforce, compute etc), not all that can be automated will be automated
 
 
-# Approach
+## Approach
 
 a) Estimates of the likelihood of automation are based on the 2012 research available here:
 https://www.oxfordmartin.ox.ac.uk/downloads/academic/The_Future_of_Employment.pdf
@@ -53,7 +53,7 @@ The Gaussian Process Classifier implemented in sklearn is used to calculate prob
 Retraining on the 2010 labels produce similar results so new estimates are obtained using latest available 2018 data
 
 
-# Original research methodology
+## Original research methodology
 
 1) Machine learning exerts held a workshop to hand-label around 70 of ~ 700 occupations by eye-balling the skills requirements  collected in the O*NET database. Specifically they answered yes/no to the question:
 “Can the tasks of this job be sufficiently specified, conditional on the availability of big data, to be performed by state-of-the-art computer-controlled equipment”
@@ -63,7 +63,7 @@ Retraining on the 2010 labels produce similar results so new estimates are obtai
 
 
 
-# Ongoing work
+## Ongoing work
 
 - Further work to align Gaussian modelling for 2010 datasets
 - Extend to other countries?

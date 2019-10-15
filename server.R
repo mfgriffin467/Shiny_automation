@@ -145,9 +145,13 @@ output$highBox = renderInfoBox({
 output$table = DT::renderDataTable({
     datatable(data_all_filter() %>% 
               select(keep_columns) %>%
- #             rename(rename_columns = keep_columns) %>% 
+              rename("Job count" = TOT_EMP, "Av annual salary" = A_MEAN, "Low level job group" = major_job_description, 
+                     "High level job group" = top_level_job_category_desc, "Likelihood of automation" = prob_automation_class,
+                     "Cognitive ability requirements" = cognitive_abilities, "Physical ability requirements" = physical_abilities,
+                     "Psychomotor ability requirements" = psychomotor_abilities, "Sensory ability requirements" = sensory_abilities) %>% 
               arrange(desc(Probability)),
-              caption = "Use search bar to explore detail with state/type bucket")
+              caption = "Use search bar to explore detail with state/type bucket",
+              options = list(pageLength=5))
   })
 
   
@@ -266,7 +270,7 @@ output$distn = renderPlot(
       fill = prob_automation_class
     ))
   + theme_minimal()
-  + ylab("Proportion of US jobs by category")
+  + ylab("Count of US jobs (millions)")
   + scale_y_continuous(labels=scaleFUN)
   + theme(text = element_text(size = 20),axis.text.x=element_blank(),axis.title.x=element_blank(),legend.position = "top")
   + scale_fill_brewer(palette = "Spectral",name="Likelihood of automation")
@@ -320,7 +324,10 @@ output$bottleneck = renderPlot(data_all_filter() %>%
                                            negotiation = mean(Negotiation),
                                            originality = mean(Originality),
                                            persuasion = mean(Persuasion),
-                                           social_perceptiveness = mean(social_perceptiveness)) %>% 
+                                           social_perceptiveness = mean(social_perceptiveness),
+                                           assisting_and_caring = mean(assisting_and_caring),
+                                           cramped_work_space = mean(cramped_work_space)
+                                           ) %>% 
                                  gather("skill","level",-prob_automation_class) %>%
                                  ggplot(aes(x=prob_automation_class,fill=skill,y=level))
                                + geom_col(stat="identity",position="dodge")

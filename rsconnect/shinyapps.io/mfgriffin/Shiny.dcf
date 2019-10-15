@@ -5,9 +5,9 @@ account: mfgriffin
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 1323763
-bundleId: 2500715
+bundleId: 2500946
 url: https://mfgriffin.shinyapps.io/Shiny/
-when: 1571107725.69842
+when: 1571115811.08585
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: python_ML/ML_data_2010.csv|python_ML/ML_data_2018.csv|python_ML/ML_output_2018.csv|python_ML/ML_predictions.ipynb|python_ML/.ipynb_checkpoints/ML_predictions-checkpoint.ipynb

@@ -10,22 +10,21 @@ See Shiny IO here: https://mfgriffin.shinyapps.io/Shiny/
 
 ## Project aims:
 
-1) Provide a dynamic tool for visualisation research on the possible impact of automation/computerisation of jobs over the medium-term
-2) Update the original 2012 research to latest available information
+1) Produce a dynamic tool for visualisation research on the possible impact of automation/computerisation of jobs over the medium-term
+2) Update the original 2012 research to latest available information accounting for job number changes, skill movemenets and remodelling
 
 
 The dashboard enables users to explore a variety of questions which could be of use to individuals, organisations and policy-makers:
-1) How many jobs are at risk of computerisation?
-2) How are high risk roles distributed across states and industries?
-3)  Is my current / future role likley to be replaced?
-4)  Which skills are more or less likley to be automated?
-5)  How has the landscape changed since the 2012 research?
+
+1) Individuals: is my current or future role likley to be replaced? Are there particular skills to emphasise on to help future-proof careers?
+2) Policy-makers: how many jobs are at risk of computerisation?  How are high risk roles distributed across states and industries?
+3) Businesses: what are the threats and opportunities which arise with the possible changes in job landsdcape? Could retraining employees to adjacent roles make sense?
+4) General - has the forecast or analysis changed since the original 2012 research?
 
 
 ## Key caveats:
 
-This analysis narrowly focusses on the theoretical potential for job substitution in the US, looking at a single measure of the estimated 
-probability that job roles can be fully automated. 
+This analysis narrowly focusses on the theoretical potential for job substitution in the US, presneting a single measure of the estimated probability that job roles can be fully automated. 
 
 This approach therefore several real-life factors:
 - New jobs: in the past, technology has replaced roles but new positions have been created through the creative destruction process. This will surely continue
@@ -33,6 +32,8 @@ This approach therefore several real-life factors:
 - Job augmentation: the likelihood of computerisation is based on an assessment of current skills and abilities required for roles - technology may change these skillsets over time
 - Policy response: action could be taken to protect roles
 - Resources: in a world of limited finances and technical resource (robust data, workforce, compute etc), not all that can be automated will be automated
+
+Note that other analysis produces very different estimations of the likelihood of computerisation.
 
 
 ## Approach
@@ -44,10 +45,11 @@ b) Job breakdowns across role and state are taken for 2010, 2012, 2014, 2016 and
 https://www.bls.gov/oes/tables.htm
 
 Tables are enriched to cover skill/ability/knowledge data for "bottleneck variables" identified in (a) using information from O*NET
+https://www.onetonline.org/
 
 c) The shiny application shows the mapping of estimates from (a) across the datasets in (b)
 
-d) Ongoing work - Probability estimates are recalculated using the latest skill, accoutning for changes in job capabilities and new job profiles.
+d) Ongoing work - Probability estimates are recalculated using the latest skill, accounting for changes in job capabilities and new job profiles.
 The Gaussian Process Classifier implemented in sklearn is used to calculate probability estimates using the Rational Quadratic kernel 
 Retraining on the 2010 labels produce similar results so new estimates are obtained using latest available 2018 data
 
@@ -64,6 +66,9 @@ Retraining on the 2010 labels produce similar results so new estimates are obtai
 
 ## Ongoing work
 
+- Consolidate dataset
+- Align 2010 headline % figure
+- Fix skill charts 
 - Further work to align Gaussian modelling for 2010 datasets
 - Extend to other countries?
 
@@ -71,6 +76,7 @@ MAJOR
 - Re-run ML for 2018
 
 MINOR
+
 - Draft bog post in Word
 - Hide drop downs for specific tabs
 - Fix ranking for main visuals

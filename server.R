@@ -154,6 +154,7 @@ output$table = DT::renderDataTable({
 
 # Render charts ####
   
+
 output$time = renderPlot(data_all_year_filter() %>%
                          group_by(YEAR,prob_automation_class) %>% 
                          summarise(current_jobs = sum(TOT_EMP)/10**6) %>% 
@@ -342,5 +343,31 @@ output$pay = renderPlot(data_all_filter() %>%
                                + theme(text = element_text(size = 20))
                                + ggtitle("Salary across automation classes")
 )         
+
+
+output$time_mod = renderPlot(data_all_year_filter() %>%
+                           group_by(YEAR,prob_class_new) %>% 
+                           summarise(current_jobs = sum(TOT_EMP)/10**6) %>% 
+                           ggplot() 
+                         + geom_area(aes(x=YEAR,y=current_jobs,fill=prob_class_new))
+                         + xlab("Jobs over time")
+                         + ylab("Count of US jobs (millions)")
+                         + scale_y_continuous(labels=scaleFUN)
+                         + ggtitle("Absolute figures")
+                         + scale_fill_brewer(palette = "Spectral",name="Likelihood of automation")
+                         + theme(text = element_text(size = 20),legend.position = "bottom"))
+
+output$time2_mod = renderPlot(data_all_year_filter() %>%
+                            group_by(YEAR,prob_class_new) %>% 
+                            summarise(current_jobs = sum(TOT_EMP)/10**6) %>% 
+                            ggplot() 
+                          + geom_area(aes(x=YEAR,y=current_jobs,fill=prob_class_new),position = "fill")
+                          + xlab("Jobs over time")
+                          + ylab("Proportion of US jobs (millions)")
+                          + scale_y_continuous(labels = scales::percent)
+                          + ggtitle("Relative proportions")
+                          + scale_fill_brewer(palette = "Spectral",name="Likelihood of automation")
+                          + theme(text = element_text(size = 20),legend.position = "bottom"))
+
 
 })

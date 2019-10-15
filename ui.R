@@ -36,6 +36,12 @@ shinyUI(dashboardPage(
         icon = icon('brain')
       ),
       
+      menuItem(
+        "Updated modelling",
+        tabName = "model",
+        icon = icon('cog')
+      ),
+      
       br(),
       menuItem(
         "Data drill-down",
@@ -44,7 +50,7 @@ shinyUI(dashboardPage(
       ),
       menuItem("Background", 
                tabName = "background", 
-               icon = icon('cog')),
+               icon = icon('book')),
       br(),
       selectizeInput("selected_year",
                      label = "Select year to Display",
@@ -112,8 +118,9 @@ dashboardBody(
         ),
         fluidRow(
           column(width = 6, box(width=12, plotOutput("time"))),
-          column(width = 6, box(width=12, plotOutput("time2"))))
-          ),
+          column(width = 6, box(width=12, plotOutput("time2")))
+          )
+      ),
       tabItem(
         tabName = "visuals",
         fluidRow(style = "padding: 20px;",
@@ -163,6 +170,14 @@ dashboardBody(
                                     p("- Nine 'botteneck variables' are proposed and used as the explanatory features to estimate the likelihood of automation")
                                     )))
               ),
+      tabItem(tabName = "model",
+              fluidRow(style = "padding: 20px;",
+                       h2("Updated modelling based on latest job profiles")),
+              fluidRow(
+                column(width = 6, box(width=12, plotOutput("time_mod"))),
+                column(width = 6, box(width=12, plotOutput("time2_mod")))
+              )
+      ),
       tabItem(tabName = "data",
               fluidRow(style = "padding: 20px;",
                 DT::dataTableOutput("table")

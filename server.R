@@ -55,6 +55,25 @@ summary_filter_data_df = reactive({
 })
 
 
+# Create shared frequency table for maps
+
+job_states = reactive({
+  data_job_filter() %>% 
+    group_by(STATE) %>%
+    summarise(n_state=n())
+})
+
+job_prob_states = reactive({
+  data_job_filter() %>% 
+    group_by(prob_automation_class,STATE) %>%
+    summarise(n_state_prob=n())
+})
+
+job_maps = reactive({
+  left_join(job_prob_states(),job_states(),by="STATE") %>% 
+  mutate(proportion = n_state_prob/n_state)
+})
+
 # Info boxes ####
 
 output$highBox = renderInfoBox({    
@@ -104,7 +123,7 @@ output$highBox = renderInfoBox({
             title = "% jobs at high risk",
             subtitle = "in selection",
             value, 
-            icon = icon("hand-o-down")) 
+            icon = icon("percent")) 
   })
   
   output$mediumBoxPerc = renderInfoBox({    
@@ -120,7 +139,7 @@ output$highBox = renderInfoBox({
             title = "% jobs at medium risk",
             subtitle = "in selection",
             value, 
-            icon = icon("exchange-alt")) 
+            icon = icon("percent")) 
   })
   
   output$lowBoxPerc = renderInfoBox({    
@@ -136,7 +155,7 @@ output$highBox = renderInfoBox({
             title = "% jobs at low risk",
             subtitle = "in selection",
             value, 
-            icon = icon("hand-o-up")) 
+            icon = icon("percent")) 
   })
     
 # Render tables ####
@@ -184,12 +203,11 @@ output$time2 = renderPlot(data_all_year_filter() %>%
                          + theme(text = element_text(size = 20),legend.position = "bottom"))
 
 output$maphigh <- renderGvis({
-    gvisGeoChart(data = data_job_filter() %>%  
+    gvisGeoChart(data = job_maps() %>%  
                 filter(prob_automation_class == "1) High") %>% 
-                group_by(STATE) %>%
-                summarise(current_jobs = sum(TOT_EMP)/10**6),
+                select(STATE,proportion),
                 locationvar = "STATE",
-                colorvar = "current_jobs",
+                colorvar = "proportion",
                 options = list(
                   region = "US",
                   displayMode = "regions",
@@ -202,12 +220,11 @@ output$maphigh <- renderGvis({
   })
 
 output$mapmedium <- renderGvis({
-  gvisGeoChart(data = data_job_filter() %>%  
+  gvisGeoChart(data = job_maps() %>%  
                  filter(prob_automation_class == "2) Medium") %>% 
-                 group_by(STATE) %>%
-                 summarise(current_jobs = sum(TOT_EMP)/10**6),
+                 select(STATE,proportion),
                locationvar = "STATE",
-               colorvar = "current_jobs",
+               colorvar = "proportion",
                options = list(
                  region = "US",
                  displayMode = "regions",
@@ -220,14 +237,11 @@ output$mapmedium <- renderGvis({
 })
 
 output$maplow <- renderGvis({
-  gvisGeoChart(data = data_job_filter() %>%  
+  gvisGeoChart(data = job_maps() %>%  
                  filter(prob_automation_class == "3) Low") %>% 
-                 group_by(STATE) %>%
-                 summarise(current_jobs = sum(TOT_EMP)/10**6),
+                 select(STATE,proportion),
                locationvar = "STATE",
-               #header = 'test',
-               colorvar = "current_jobs",
-               #title = "Absolute job count at high risk, within selected sector",
+               colorvar = "proportion",
                options = list(
                  title = "Test",
                  region = "US",
@@ -243,8 +257,9 @@ output$maplow <- renderGvis({
   
 output$shape = renderPlot(
   data_state_filter() %>% 
-  filter(!is.na(Probability)) %>%  ####HACK######################################
+  filter(!is.na(Probability)) %>% 
   group_by(rounded_prob, top_level_job_category_desc) %>%
+  filter(top_level_job_category_desc != "Farming, Fishing, and Forestry") %>%  # Remove tiny segment for clean visualisation
   summarise(current_jobs = sum(TOT_EMP)/10**6) %>% 
   ggplot()
     + geom_histogram(aes(x=rounded_prob,weight=current_jobs,fill=top_level_job_category_desc),bins=40)
@@ -254,11 +269,10 @@ output$shape = renderPlot(
     + scale_x_continuous(labels = scales::percent)
     + ylab("Count of US jobs (millions)")
     + scale_y_continuous(labels=scaleFUN)
-    + ggtitle("Distribution of jobs by likelihood of automation, within segment")
     + theme_minimal()    
     + theme(text = element_text(size = 20),legend.position = "bottom")
     + scale_fill_brewer(palette = "Spectral",name="Job category"),
-  height = 800,
+  height = 900,
   width = 1600
 )
   
@@ -339,16 +353,17 @@ output$bottleneck = renderPlot(data_all_filter() %>%
 )         
 
 output$pay = renderPlot(data_all_filter() %>%
-                                 group_by(prob_automation_class) %>%
-                                 summarise(mean_salary = mean(A_MEAN)) %>% 
-                                 ggplot(aes(x=prob_automation_class,y=mean_salary))
-                               + geom_col()
-                              + xlab("Likelihood of computerisation")
-                              + ylab("Mean annual salary within bucket")
-                              + scale_fill_brewer(palette = "Pastel1")     
-                               + theme_minimal()
-                               + theme(text = element_text(size = 20))
-                               + ggtitle("Salary across automation classes")
+                          mutate(salary_weighted = A_MEAN * TOT_EMP ) %>% 
+                          group_by(OCC_CODE, Probability) %>% 
+                          summarise(Mean_salary_k = sum(salary_weighted)/sum(TOT_EMP)/10**3) %>% 
+                          ggplot(aes(x=Probability,y=Mean_salary_k))
+                        + geom_point() + geom_smooth(method = 'lm')
+                        + xlab("Likelihood of computerisation")
+                        + ylab("Mean annual salary k")
+                        + scale_fill_brewer(palette = "Pastel1")     
+                        + theme_minimal()
+                        + theme(text = element_text(size = 20))
+                        + ggtitle("Salary across automation classes")
 )         
 
 

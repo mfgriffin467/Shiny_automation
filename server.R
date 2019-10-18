@@ -202,6 +202,20 @@ output$time2 = renderPlot(data_all_year_filter() %>%
                          + scale_fill_brewer(palette = "Spectral",name="Likelihood of automation")
                          + theme(text = element_text(size = 20),legend.position = "bottom"))
 
+
+# Jobs page
+
+output$jobs = renderPlotly({
+                        data_all_filter() %>%
+                        group_by(OCC_TITLE, Probability) %>%
+                        summarise(job_number = sum(TOT_EMP)) %>%
+                        select(OCC_TITLE,job_number,Probability) %>% 
+                        plot_ly(x = ~ Probability, y = ~job_number,text = ~ OCC_TITLE) %>% 
+                        add_markers() %>% 
+                        layout(height = 800,width = 1400)
+                          })
+
+
 output$maphigh <- renderGvis({
     gvisGeoChart(data = job_maps() %>%  
                 filter(prob_automation_class == "1) High") %>% 

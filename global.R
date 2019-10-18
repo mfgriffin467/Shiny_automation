@@ -9,6 +9,8 @@ library(DT)
 library(stringr) 
 library(RColorBrewer)
 library(shinyWidgets)
+library(plotly)
+
 
 # Add search job list or other columns
 

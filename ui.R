@@ -13,10 +13,17 @@ shinyUI(dashboardPage(
                icon = icon('book-open')),
       br(),
        menuItem(
-        "Over time", 
+        "Headlines", 
         tabName = "time", 
-        icon = icon('calendar')),     
+        icon = icon('calendar')
+        ),     
       menuItem(
+        "Individual jobs",
+        tabName = "jobs",
+        icon = icon('briefcase')
+      ),
+      br(),
+        menuItem(
         "Across industries I",
         tabName = "visuals",
         icon = icon('briefcase')
@@ -77,7 +84,7 @@ shinyUI(dashboardPage(
   
 dashboardBody(
   tags$head( 
-    tags$style(HTML(".main-sidebar { font-size: 18px; }")) #change the font size to 20
+    tags$style(HTML(".main-sidebar { font-size: 15px; }")) #change the font size to 20
   ),
     tabItems(
       tabItem(tabName = "intro",
@@ -127,6 +134,15 @@ dashboardBody(
           column(width = 6, box(width=12, plotOutput("time2")))
           )
       ),
+      tabItem(
+        tabName = "jobs",
+        fluidRow(style = "padding: 20px;",
+                 h3("Modelling of probability of automation across jobs"),
+                 h4("Hover over points to invetsigate specific roles")
+                 ),
+        fillPage(
+          plotlyOutput("jobs", height = "100%", width = "100%"))
+      ),  
       tabItem(
         tabName = "visuals",
         fluidRow(style = "padding: 20px;",

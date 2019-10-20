@@ -38,7 +38,6 @@
 "13-1032","Insurance Appraisers, Auto Damage",0.46,1.38,0.75,3.25,3,2.25,3,1.22,1.86,NA,0.98
 "13-1041","Compliance Officers",0.111666666666667,2.71,1.66833333333333,3.68333333333333,3.145,3.315,3.43833333333333,3.24833333333333,1.93333333333333,0,0.08
 "13-1051","Cost Estimators",0.29,2.12,0.12,3.25,3.25,3.25,3.75,1.89,1.29,1,0.57
-"13-1071","Human Resources Specialists",0.1,1.88,0,3.88,3.12,3.12,3.12,3.35,1.21,NA,NA
 "13-1074","Farm Labor Contractors",0.38,1.5,2.5,3,3,2,2.88,2.8,1.2,1,0.97
 "13-1081","Logisticians",0.71,2.54,0.58,3.33333333333333,3.08,3.92,3.37666666666667,2.51,1.59333333333333,NA,0.012
 "13-1111","Management Analysts",0.17,1.5,0,3.62,3,3.38,3.38,2.82,1.53,NA,0.13
@@ -184,6 +183,7 @@
 "25-2022","Middle School Teachers, Except Special and Career/Technical Education",2.43,2,0.38,3.62,3.38,3.25,3.25,3.3,1.6,NA,0.17
 "25-2023","Career/Technical Education Teachers, Middle School",1.37,2.38,2.12,3.5,2.75,3.12,2.75,3.32,1.61,NA,0.26
 "25-2031","Secondary School Teachers, Except Special and Career/Technical Education",2.81,2.12,0.38,3.75,3,3.75,3,3.47,1.14,NA,0.0078
+"25-2031","Substitute Teachers",2.81,2.12,0.38,3.75,3,3.75,3,3.47,1.14,NA,0.0078
 "25-2032","Career/Technical Education Teachers, Secondary School",1.19,2.88,2.62,3.75,3.5,3.5,3.75,4.22,1.67,NA,0.0088
 "25-2053","Special Education Teachers, Middle School",1.33,2.12,0.38,3.75,3.25,3.5,3.38,4.07,1.15,NA,0.016
 "25-2054","Special Education Teachers, Secondary School",1.71,2.12,0.25,4,2.75,3.62,3,3.79,1.45,NA,0.0077
@@ -252,10 +252,8 @@
 "29-1126","Respiratory Therapists",0.84,3.25,2.88,3.75,3.12,2.88,3.25,6.05,2.59,NA,0.066
 "29-1127","Speech-Language Pathologists",0.87,2.38,0.25,4.38,2.88,4.25,3.5,4.5,1.74,NA,0.0064
 "29-1131","Veterinarians",0,4,3.88,3.62,3.12,3.12,3.12,5.13,1.77,NA,0.038
-"29-1141","Registered Nurses",0.564,3.324,2.776,4.324,3.176,3.374,3.4,6.204,2.688,NA,NA
 "29-1151","Nurse Anesthetists",0.21,3.5,3.12,3.88,3.25,3,3.25,6.59,2.91,NA,NA
 "29-1161","Nurse Midwives",0.13,3.12,2.88,4,3.12,3,3.5,6.42,2.37,NA,NA
-"29-1171","Nurse Practitioners",0.52,3.62,3.5,4.25,3.38,3.25,3.62,6.35,2.29,NA,NA
 "29-1181","Audiologists",0.59,4.12,2.75,4,2.62,3.75,3.12,5.1,1.48,NA,0.0033
 "29-1199","Health Diagnosing and Treating Practitioners, All Other",0.253333333333333,3.66666666666667,2.20666666666667,4.12666666666667,2.37333333333333,3.29333333333333,3.25,5.1,1.38666666666667,NA,0.02
 "29-2011","Medical and Clinical Laboratory Technologists",0.1675,3.6875,2.72,3.03,2.2175,2.72,2.345,2.835,1.54,NA,0.9
@@ -274,6 +272,8 @@
 "29-2055","Surgical Technologists",0.58,3.75,3.75,3.38,2.25,2.38,2.5,5.67,2.72,NA,0.34
 "29-2056","Veterinary Technologists and Technicians",0,3.75,3.25,3.5,2.5,3,2.75,6.01,2.86,NA,0.029
 "29-2061","Licensed Practical and Licensed Vocational Nurses",0.14,3.25,2.88,4,3,2.88,3.25,5.84,3.16,NA,0.058
+"29-2061","Nurse Practitioners",0.14,3.25,2.88,4,3,2.88,3.25,5.84,3.16,NA,0.058
+"29-2061","Nursing Assistants",0.14,3.25,2.88,4,3,2.88,3.25,5.84,3.16,NA,0.058
 "29-2071","Medical Records and Health Information Technicians",0,2.62,2.38,2.62,2.25,2.5,2,2.8,2.22,NA,0.91
 "29-2081","Opticians, Dispensing",0.33,3.5,3.12,3.12,3,2.75,3,3.77,1.5,NA,0.71
 "29-2091","Orthotists and Prosthetists",0.39,3.5,3.12,3.88,2.75,3.5,3.25,5.42,2.42,NA,0.0035
@@ -298,7 +298,6 @@
 "31-9095","Pharmacy Aides",0.02,2.75,2.25,2.75,1.62,1.75,2.12,4.07,2.15,NA,0.72
 "31-9096","Veterinary Assistants and Laboratory Animal Caretakers",0.44,2.75,2.62,2.75,2.12,1.88,2,3.32,2.31,NA,0.86
 "31-9097","Phlebotomists",0.24,3.38,2.75,3,2.25,2.25,2.62,5.2,2.24,NA,NA
-"31-9099","Healthcare Support Workers, All Other",0.435,2.935,2.44,3.435,2.56,2.375,2.685,4.81,1.79,NA,NA
 "33-1011","First-Line Supervisors of Correctional Officers",0.04,2.38,2.38,3.88,3.12,3.25,3.5,4.7,2.2,NA,0.025
 "33-1012","First-Line Supervisors of Police and Detectives",0.26,2.75,2.75,4,3.38,3.5,4.25,4.68,2.32,NA,0.0044
 "33-1021","First-Line Supervisors of Fire Fighting and Prevention Workers",0.19,2.94,3.065,3.75,3.185,3.56,3.5,4.96,3.145,NA,0.0036
@@ -385,6 +384,7 @@
 "41-3021","Insurance Sales Agents",0.39,1.88,0,3.38,3.5,2.75,3.62,2.7,1.26,NA,0.92
 "41-3031","Securities, Commodities, and Financial Services Sales Agents",0.215,2.38,1.255,3.69,3.5,3.565,4.25,3.385,1.525,NA,0.016
 "41-3041","Travel Agents",0.04,1.88,0.38,3.25,3.25,3.25,3.38,3.98,1.34,NA,0.099
+"41-4011","Sales Representatives, Services, All Other",0.135,2.25,0.315,3.5,3.69,3.315,4.065,2.11,1.8,NA,0.25
 "41-4011","Sales Representatives, Wholesale and Manufacturing, Technical and Scientific Products",0.135,2.25,0.315,3.5,3.69,3.315,4.065,2.11,1.8,NA,0.25
 "41-4012","Sales Representatives, Wholesale and Manufacturing, Except Technical and Scientific Products",0.15,1.88,1.12,3.38,3.88,3,3.88,1.7,1.46,NA,0.85
 "41-9011","Demonstrators and Product Promoters",0.16,2.38,0.88,3.12,2.62,3.25,3.75,2.15,1.18,NA,0.51
@@ -568,6 +568,7 @@
 "51-2021","Coil Winders, Tapers, and Finishers",0,3.13,3,2.5,1.62,1.38,1.75,1.98,1.89,NA,0.73
 "51-2022","Electrical and Electronic Equipment Assemblers",0.02,3.75,3.63,2.88,2.5,2.25,2.38,2.06,2.62,1,0.95
 "51-2023","Electromechanical Equipment Assemblers",0.74,3.63,3.5,2.12,2,2.13,2,2.1,2.12,NA,0.97
+"51-2031","Assemblers and Fabricators, All Other, Including Team Assemblers",0,3.38,3.25,2.25,1.75,1.75,1.88,1.84,3.28,NA,0.82
 "51-2031","Engine and Other Machine Assemblers",0,3.38,3.25,2.25,1.75,1.75,1.88,1.84,3.28,NA,0.82
 "51-2041","Structural Metal Fabricators and Fitters",0,2.75,3.25,2.38,1.5,0.5,2,1.55,2.47,NA,0.41
 "51-2091","Fiberglass Laminators and Fabricators",0.2,3.13,3.38,2.38,2.38,2.38,2.5,2.54,2.6,NA,0.93

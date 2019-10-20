@@ -13,7 +13,7 @@ shinyUI(dashboardPage(
                icon = icon('book-open')),
       br(),
        menuItem(
-        "Headlines", 
+        "Headlines stats", 
         tabName = "time", 
         icon = icon('calendar')
         ),     
@@ -29,15 +29,14 @@ shinyUI(dashboardPage(
         icon = icon('briefcase')
       ),
      menuItem(
-        'Across states', 
-        tabName = "maps", 
-        icon = icon('map')),      
-     
-     menuItem(
         "Across industries II",
         tabName = "shape",
         icon = icon('briefcase')
-      ),
+      ),      
+     menuItem(
+        'Across states', 
+        tabName = "maps", 
+        icon = icon('map')),      
      menuItem(
         "By capabilities",
         tabName = "skills",
@@ -94,24 +93,19 @@ dashboardBody(
                 em(h3("\"47% could be done by machines \'over the next decade or two\'\"")),
                 p("Carl Benedikt Frey and Michael Osborne of Oxford University"),
                 br(),
-                h2("Project aims"),
-                br(),
-                h3("1)	Provide a dynamic tool for visualisation research on the possible impact of automation/computerisation of jobs over the medium-term"),
-                h3("2)	Update the original 2012 research to latest available information"),
+                h4("Please see blog link below for an explanation of the project and findings:"),
+                a("https://nycdatascience.com/blog/student-works/how-vulnerable-could-us-jobs-be-to-automation/"),
                 br(),
                 br(),
-                h2("Output"),
                 br(),
                 h4("This dashboard enables users to explore a variety of questions which could be of use to individuals, organisations and policy-makers:"),
-                br(),
                 em(
                   h4("1) Individuals: is my current or future role likley to be replaced? Are there particular skills to emphasise on to help future-proof careers?"),
                   h4("2) Policy-makers: how many jobs are at risk of computerisation?  How are high risk roles distributed across states and industries?"),
                   h4("3) Businesses: what are the threats and opportunities which arise with the possible changes in job landsdcape? Could retraining employees to adjacent roles make sense?"),
                   h4("4) General - has the forecast or analysis changed since the original 2012 research?")),
                 br(),
-                h2("Ongoing work"),
-                br(),
+                h3("Ongoing work"),
                 h4("Full update to 2018 data with re-run of ML analysis")
                 
               
@@ -132,7 +126,10 @@ dashboardBody(
         fluidRow(
           column(width = 6, box(width=12, plotOutput("time"))),
           column(width = 6, box(width=12, plotOutput("time2")))
-          )
+        ),
+        fluidRow(
+          infoBoxOutput("newBoxPerc")
+        )
       ),
       tabItem(
         tabName = "jobs",
@@ -157,7 +154,12 @@ dashboardBody(
       tabItem(tabName = "shape",
               fluidRow(style = "padding: 20px;",
                        h3("Breakdown of job types by likelihood of automation")),
-              fillPage(
+              fluidRow(
+                column(width=4, h3("LOW RISK")),
+                column(width=4, h3("MEDIUM RISK")),
+                column(width=4, h3("HIGH RISK"))
+                ),              
+                        fillPage(
                 plotOutput("shape", height = "100%", width = "100%"))
               ),      
       tabItem(tabName = "maps",
@@ -203,16 +205,17 @@ dashboardBody(
                 column(width = 6, box(width=12, plotOutput("time_mod"))),
                 column(width = 6, box(width=12, plotOutput("time2_mod")))
               ),
+              fluidRow(
+                infoBoxOutput("highBoxPercMod"),
+                infoBoxOutput("mediumBoxPercMod"),
+                infoBoxOutput("lowBoxPercMod"),
+                infoBoxOutput("newBoxPercMod")
+              ),
               fluidRow(style = "padding: 20px;",
                 h3("Approach"),
                 h4("- Analysis used 2019 skills data from O-NET to capture latest job skill profiles, including new roles addes since 2010"),
                 h4("- Use same ground truth labels as 2012 research to train Gaussian classfier model"),
-                h4("- Analysis implemented in python using sklearn package with rational quadratic kernel"),
-                br(),
-                h3("Further work"),
-                h4("- Further investigation to align day 1 modelling aginst report - explore detailed kernal and cross-validation approach"),
-                h4("- Update skills and models in every year of data")
-                
+                h4("- Analysis implemented in python using sklearn package with rational quadratic kernel")
               )
       ),
       tabItem(tabName = "data",

@@ -87,7 +87,6 @@ output$highBox = renderInfoBox({
                       icon = icon("hand-o-down")) 
   })
 
-
   output$mediumBox = renderInfoBox({    
     max_value = data_all_filter() %>% 
       filter(prob_automation_class == "2) Medium" ) %>% 
@@ -158,6 +157,25 @@ output$highBox = renderInfoBox({
             icon = icon("percent")) 
   })
     
+
+output$newBoxPerc = renderInfoBox({    
+  subset = data_all_filter() %>% 
+    filter(prob_automation_class == "4) New / Unclassified" ) %>% 
+    summarise(jobs= sum(TOT_EMP))
+  
+  total = data_all_filter() %>% 
+    summarise(jobs= sum(TOT_EMP))
+  
+  value = 100* round(sum(subset$jobs)/sum(total$jobs),digits=3)
+  infoBox(color = "blue",
+          title = "% in new or unclassified jobs",
+          subtitle = "in selection",
+          value, 
+          icon = icon("percent")) 
+}) 
+  
+
+
 # Render tables ####
   
   
@@ -177,6 +195,7 @@ output$table = DT::renderDataTable({
 
 # Render charts ####
   
+# Headline time stats
 
 output$time = renderPlot(data_all_year_filter() %>%
                          group_by(YEAR,prob_automation_class) %>% 
@@ -188,7 +207,8 @@ output$time = renderPlot(data_all_year_filter() %>%
                           + scale_y_continuous(labels=scaleFUN)
                           + ggtitle("Absolute figures")
                           + scale_fill_brewer(palette = "Spectral",name="Likelihood of automation")
-                          + theme(text = element_text(size = 20),legend.position = "bottom"))
+                          + theme(text = element_text(size = 20),legend.position = "bottom")
+                         )
 
 output$time2 = renderPlot(data_all_year_filter() %>%
                            group_by(YEAR,prob_automation_class) %>% 
@@ -200,21 +220,70 @@ output$time2 = renderPlot(data_all_year_filter() %>%
                          + scale_y_continuous(labels = scales::percent)
                          + ggtitle("Relative proportions")
                          + scale_fill_brewer(palette = "Spectral",name="Likelihood of automation")
-                         + theme(text = element_text(size = 20),legend.position = "bottom"))
+                         + theme(text = element_text(size = 20),legend.position = "bottom")                         )
 
 
 # Jobs page
 
+color_map <- c("1) High" = "b) high risk", "2) Medium"="c) medium risk", "3) Low" = "a) low risk")
+# hack relies on alphabetic ordering
+
+
+# Aggregate job views
+
 output$jobs = renderPlotly({
                         data_all_filter() %>%
-                        group_by(OCC_TITLE, Probability) %>%
+                        group_by(OCC_TITLE, Probability, prob_automation_class) %>%
                         summarise(job_number = sum(TOT_EMP)) %>%
-                        select(OCC_TITLE,job_number,Probability) %>% 
-                        plot_ly(x = ~ Probability, y = ~job_number,text = ~ OCC_TITLE) %>% 
+                        select(OCC_TITLE,job_number,Probability,prob_automation_class) %>% 
+                        plot_ly(x = ~ Probability, y = ~job_number,text = ~ OCC_TITLE, color= ~ color_map[prob_automation_class]) %>% 
+          #              plot_ly(x = ~ Probability, y = ~job_number, color= ~ color_map[prob_automation_class]) %>% 
+          #              add_text(text = ~ OCC_TITLE) %>% 
                         add_markers() %>% 
-                        layout(height = 800,width = 1400)
+                        layout(height = 700,width = 1600)
                           })
 
+
+# Headline stats by industry 1
+
+output$distn = renderPlot(
+  ggplot(data = summary_filter_data_df())
+  + geom_col(aes(x = reorder(top_level_job_category_desc,-current_jobs),
+                 y = current_jobs/10**6,
+                 fill = prob_automation_class
+  ))
+  + theme_minimal()
+  + ylab("Count of US jobs (millions)")
+  + scale_y_continuous(labels=scaleFUN)
+  + theme(text = element_text(size = 20),axis.text.x=element_blank(),axis.title.x=element_blank(),legend.position = "top")
+  + scale_fill_brewer(palette = "Spectral",name="Likelihood of automation")
+  + scale_x_discrete(
+    labels = function(x)
+      lapply(strwrap(x, width = 10, simplify = FALSE), paste, collapse = "\n")),
+  height = 350
+)
+
+
+
+output$distn2 = renderPlot(
+  ggplot(data = summary_filter_data_df()) + xlab("Job group") + geom_col(
+    aes(x = reorder(top_level_job_category_desc,-current_jobs),
+        y = current_jobs,
+        fill = prob_automation_class),
+    position = "fill") 
+  + theme_minimal()
+  + ylab("Proportion by class")
+  + scale_y_continuous(labels = scales::percent)
+  + theme(text = element_text(size = 20),legend.position = "none")
+  + scale_fill_brewer(palette = "Spectral",name="Likelihood of automation")
+  + scale_x_discrete(
+    labels = function(x)
+      lapply(strwrap(x, width = 10, simplify = FALSE), paste, collapse = "\n")),
+  height=350
+)
+
+
+# Across states map
 
 output$maphigh <- renderGvis({
     gvisGeoChart(data = job_maps() %>%  
@@ -268,6 +337,8 @@ output$maplow <- renderGvis({
   )
 })
 
+
+# Across industries II tab
   
 output$shape = renderPlot(
   data_state_filter() %>% 
@@ -286,47 +357,13 @@ output$shape = renderPlot(
     + theme_minimal()    
     + theme(text = element_text(size = 20),legend.position = "bottom")
     + scale_fill_brewer(palette = "Spectral",name="Job category"),
-  height = 900,
+  height = 700,
   width = 1600
 )
   
-  
-output$distn = renderPlot(
-  ggplot(data = summary_filter_data_df())
-  + geom_col(aes(x = reorder(top_level_job_category_desc,-current_jobs),
-      y = current_jobs/10**6,
-      fill = prob_automation_class
-    ))
-  + theme_minimal()
-  + ylab("Count of US jobs (millions)")
-  + scale_y_continuous(labels=scaleFUN)
-  + theme(text = element_text(size = 20),axis.text.x=element_blank(),axis.title.x=element_blank(),legend.position = "top")
-  + scale_fill_brewer(palette = "Spectral",name="Likelihood of automation")
-  + scale_x_discrete(
-    labels = function(x)
-    lapply(strwrap(x, width = 10, simplify = FALSE), paste, collapse = "\n"))
-  )
-  
-
-  
-output$distn2 = renderPlot(
-  ggplot(data = summary_filter_data_df()) + xlab("Job group") + geom_col(
-    aes(x = reorder(top_level_job_category_desc,-current_jobs),
-        y = current_jobs,
-        fill = prob_automation_class),
-    position = "fill") 
-  + theme_minimal()
-  + ylab("Proportion by class")
-  + scale_y_continuous(labels = scales::percent)
-  + theme(text = element_text(size = 20),legend.position = "none")
-  + scale_fill_brewer(palette = "Spectral",name="Likelihood of automation")
-  + scale_x_discrete(
-      labels = function(x)
-      lapply(strwrap(x, width = 10, simplify = FALSE), paste, collapse = "\n"))
-  )
 
 
-
+# Job characteristics 
 
 output$skills = renderPlot(data_all_filter() %>%
                              group_by(prob_automation_class) %>%
@@ -340,8 +377,9 @@ output$skills = renderPlot(data_all_filter() %>%
                            + xlab("Likelihood of computerisation")
                            + scale_fill_brewer(palette = "Blues")     
                            + theme_minimal()
-                           + theme(text = element_text(size = 20))
-                           + ggtitle("Ability breakdown")
+                           + theme(text = element_text(size = 20)),
+                           height=350
+#                           + ggtitle("Ability breakdown")
 )
 
 output$bottleneck = renderPlot(data_all_filter() %>%
@@ -362,8 +400,9 @@ output$bottleneck = renderPlot(data_all_filter() %>%
                                + xlab("Likelihood of computerisation")
                                + scale_fill_brewer(palette = "Pastel1")     
                                + theme_minimal()
-                               + theme(text = element_text(size = 20))
-                               + ggtitle("Bottleneck features")
+                               + theme(text = element_text(size = 20)),
+                               height=350
+#                               + ggtitle("Bottleneck features")
 )         
 
 output$pay = renderPlot(data_all_filter() %>%
@@ -376,10 +415,12 @@ output$pay = renderPlot(data_all_filter() %>%
                         + ylab("Mean annual salary k")
                         + scale_fill_brewer(palette = "Pastel1")     
                         + theme_minimal()
-                        + theme(text = element_text(size = 20))
-                        + ggtitle("Salary across automation classes")
+                        + theme(text = element_text(size = 20)),
+                        height =350
+#                        + ggtitle("Salary across automation classes")
 )         
 
+#New modelling tab
 
 output$time_mod = renderPlot(data_all_year_filter() %>%
                            group_by(YEAR,prob_class_new) %>% 
@@ -404,6 +445,71 @@ output$time2_mod = renderPlot(data_all_year_filter() %>%
                           + ggtitle("Relative proportions")
                           + scale_fill_brewer(palette = "Spectral",name="Likelihood of automation")
                           + theme(text = element_text(size = 20),legend.position = "bottom"))
+
+output$highBoxPercMod = renderInfoBox({    
+  subset = data_all_filter() %>% 
+    filter(prob_class_new == "1) High" ) %>% 
+    summarise(jobs= sum(TOT_EMP))
+  
+  total = data_all_filter() %>% 
+    summarise(jobs= sum(TOT_EMP))
+  
+  value = 100* round(sum(subset$jobs)/sum(total$jobs),digits=3)
+  infoBox(color = "red",
+          title = "% jobs at high risk",
+          subtitle = "in selection",
+          value, 
+          icon = icon("percent")) 
+})
+
+output$mediumBoxPercMod = renderInfoBox({    
+  subset = data_all_filter() %>% 
+    filter(prob_class_new == "2) Medium" ) %>% 
+    summarise(jobs= sum(TOT_EMP))
+  
+  total = data_all_filter() %>% 
+    summarise(jobs= sum(TOT_EMP))
+  
+  value = 100* round(sum(subset$jobs)/sum(total$jobs),digits=3)
+  infoBox(color = "orange",
+          title = "% jobs at medium risk",
+          subtitle = "in selection",
+          value, 
+          icon = icon("percent")) 
+})
+
+output$lowBoxPercMod = renderInfoBox({    
+  subset = data_all_filter() %>% 
+    filter(prob_class_new == "3) Low" ) %>% 
+    summarise(jobs= sum(TOT_EMP))
+  
+  total = data_all_filter() %>% 
+    summarise(jobs= sum(TOT_EMP))
+  
+  value = 100* round(sum(subset$jobs)/sum(total$jobs),digits=3)
+  infoBox(color = "green",
+          title = "% jobs at low risk",
+          subtitle = "in selection",
+          value, 
+          icon = icon("percent")) 
+})
+
+
+output$newBoxPercMod = renderInfoBox({    
+  subset = data_all_filter() %>% 
+    filter(prob_class_new == "4) New / Unclassified" ) %>% 
+    summarise(jobs= sum(TOT_EMP))
+  
+  total = data_all_filter() %>% 
+    summarise(jobs= sum(TOT_EMP))
+  
+  value = 100* round(sum(subset$jobs)/sum(total$jobs),digits=3)
+  infoBox(color = "blue",
+          title = "% in new or unclassified jobs",
+          subtitle = "in selection",
+          value, 
+          icon = icon("percent")) 
+}) 
 
 
 })

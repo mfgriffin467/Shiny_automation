@@ -20,3 +20,6 @@ The dashboard enables users to explore a variety of questions which could be of 
 2) Policy-makers: how many jobs are at risk of computerisation?  How are high risk roles distributed across states and industries?
 3) Businesses: what are the threats and opportunities which arise with the possible changes in job landsdcape? Could retraining employees to adjacent roles make sense?
 4) General - has the forecast or analysis changed since the original 2012 research?
+
+
+![](images/dashboard_visual.png)

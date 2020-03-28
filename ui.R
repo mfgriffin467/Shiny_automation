@@ -99,16 +99,13 @@ dashboardBody(
                 br(),
                 br(),
                 h4("This dashboard enables users to explore a variety of questions which could be of use to individuals, organisations and policy-makers:"),
+                br(),
                 em(
                   h4("1) Individuals: is my current or future role likley to be replaced? Are there particular skills to emphasise on to help future-proof careers?"),
                   h4("2) Policy-makers: how many jobs are at risk of computerisation?  How are high risk roles distributed across states and industries?"),
                   h4("3) Businesses: what are the threats and opportunities which arise with the possible changes in job landsdcape? Could retraining employees to adjacent roles make sense?"),
-                  h4("4) General - has the forecast or analysis changed since the original 2012 research?")),
-                br(),
-                h3("Ongoing work"),
-                h4("Full update to 2018 data with re-run of ML analysis")
-                
-              
+                  h4("4) General - has the forecast or analysis changed since the original 2012 research?"))
+ 
               )),
       tabItem(tabName = "time",
         fluidRow(style = "padding: 20px;",
@@ -210,13 +207,8 @@ dashboardBody(
                 infoBoxOutput("mediumBoxPercMod"),
                 infoBoxOutput("lowBoxPercMod"),
                 infoBoxOutput("newBoxPercMod")
-              ),
-              fluidRow(style = "padding: 20px;",
-                h3("Approach"),
-                h4("- Analysis used 2019 skills data from O-NET to capture latest job skill profiles, including new roles addes since 2010"),
-                h4("- Use same ground truth labels as 2012 research to train Gaussian classfier model"),
-                h4("- Analysis implemented in python using sklearn package with rational quadratic kernel")
               )
+
       ),
       tabItem(tabName = "data",
               fluidRow(style = "padding: 20px;",
